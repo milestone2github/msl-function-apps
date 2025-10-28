@@ -295,10 +295,10 @@ def main(mytimer: func.TimerRequest) -> None:
 
                     assigned_rm_id = data["data"][0].get("Owner", {}).get("id", random.choice(HEALTH_RM_ID_LIST))
                     logging.info(f"✅ Lead already exists in Zoho for {contact} — ID: {lead_id}")
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
-                        pdf_path = tmp.name
-                    generate_insurance_pdf(ins, pdf_path)
-                    upload_pdf_to_zoho(lead_id, pdf_path, ZOHO_ACCESS_TOKEN)
+                    # with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+                    #     pdf_path = tmp.name
+                    # generate_insurance_pdf(ins, pdf_path)
+                    # upload_pdf_to_zoho(lead_id, pdf_path, ZOHO_ACCESS_TOKEN)
                     # ✅ Still update Mongo even if exists
                     leads_col.update_one(
                         {"phone": contact},
