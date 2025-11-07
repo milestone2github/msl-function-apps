@@ -4,7 +4,7 @@
 			"name": "aggrScore",
 			"type": "timerTrigger",
 			"direction": "in",
-			"schedule": "0 30 4 1 * *"
+			"schedule": "0 30 4 * * 3"
 		}
 	]
 }
