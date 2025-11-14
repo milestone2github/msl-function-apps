@@ -79,6 +79,12 @@
     - Update the DB (using _update\_email\_metadata()_) -> Print Logs in Console
 
 
+
+##### RESOURCES:
+- SEARCH APIs = `https://www.zoho.com/mail/help/api/get-search-emails.html`
+- SEARCH SYNTAX FIELDS = `https://www.zoho.com/mail/help/search-syntax.html`
+- EMAIL LISTS AND DETAILS APIs = `https://www.zoho.com/mail/help/api/email-api.html`
+
 ---
 
 ##### PROCESS EXCEPTIONS: (as-on 15-Sept-2025)
