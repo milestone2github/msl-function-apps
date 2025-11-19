@@ -103,6 +103,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+*.bkp
 
 # Spyder project settings
 .spyderproject
