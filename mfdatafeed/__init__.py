@@ -1,6 +1,9 @@
 import azure.functions as func
-from process_file import run_process_file
-from process_file.logger_utils import log_custom
+
+from mfdatafeed.process_file import run_process_file
+from mfdatafeed.process_file.logger_utils import log_custom
+# from .process_file.logger_utils import log_custom
+# from .process_file import run_process_file
 
 # def main(req: func.TimerRequest) -> func.HttpMethod:
 def main(timer_req: func.TimerRequest) -> None:
