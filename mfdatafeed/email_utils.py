@@ -14,8 +14,8 @@ import urllib
 from urllib.parse import parse_qs, unquote, urlparse
 from typing import List, Optional
 
-from process_file.azure_utils import get_decrypt_key, store_decrypted_files, store_unsupported_file
-from process_file.logger_utils import log_custom, log_summary
+from mfdatafeed.azure_utils import get_decrypt_key, store_decrypted_files, store_unsupported_file
+from mfdatafeed.logger_utils import log_custom, log_summary
 from azure.core.exceptions import HttpResponseError
 
 CAMS_ZIP_PATTERN = re.compile(r"https://.*\.camsonline\.com/.*\.zip")

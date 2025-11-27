@@ -6,8 +6,8 @@ from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 from azure.storage.blob import BlobServiceClient
 
-from process_file.config import get_vault_name
-from process_file.logger_utils import log_custom
+from mfdatafeed.config import get_vault_name
+from mfdatafeed.logger_utils import log_custom
 
 failure_counters = {"gmail_api": 0, "azure_key_vault": 0, "mongodb": 0, "blob_storage": 0}
 

@@ -1,21 +1,23 @@
 import azure.functions as func
 
-from mfdatafeed.process_file import run_process_file
-from mfdatafeed.process_file.logger_utils import log_custom
-# from .process_file.logger_utils import log_custom
-# from .process_file import run_process_file
+from process_mails_core import process_mails_core
+from logger_utils import log_custom, log_error, log_start, log_success
+from datetime import datetime, timezone
 
-# def main(req: func.TimerRequest) -> func.HttpMethod:
+def run_process_file():
+    run_start_time = datetime.now(timezone.utc)
+    try:
+        log_start("process_mails_core")
+        process_mails_core(run_start_time)
+        log_success("process_mails_core")
+    except Exception as e:
+        log_error("process_mails_core", e)
+
+
 def main(timer_req: func.TimerRequest) -> None:
-# def main():
-  if timer_req.past_due:
-    log_custom("info", "Timer is past due!")
-  
-  log_custom("info", "Starting the Email Processing function...")
-  run_process_file()
+    if timer_req.past_due:
+        log_custom("info", "Timer is past due!")
 
-  log_custom("info", "Email Processing completed successfully.")
-  # return func.HttpResponse(f"Result: {result}", status_code=200)
-
-  if __name__ == "__main__":
-    main()
+    log_custom("info", "Starting the Email Processing function...")
+    run_process_file()
+    log_custom("info", "Email Processing completed successfully.")

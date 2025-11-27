@@ -1,5 +1,5 @@
 import os
-from process_file.logger_utils import log_custom
+from mfdatafeed.logger_utils import log_custom
 from dotenv import load_dotenv
 load_dotenv()
 

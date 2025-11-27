@@ -1,9 +1,9 @@
-from process_file.email_utils import fetch_emails_with_criteria, process_and_upload_file
-from process_file.logger_utils import log_custom, log_final_summary, log_summary_results
-from process_file.azure_utils import check_azure_container, get_azure_blob_client, get_decrypt_key
-from process_file.mongo_utils import get_mongo_client
-from process_file.zoho_auth import get_zoho_auth
-from process_file.zoho_utils import get_zoho_service
+from mfdatafeed.email_utils import fetch_emails_with_criteria, process_and_upload_file
+from mfdatafeed.logger_utils import log_custom, log_final_summary, log_summary_results
+from mfdatafeed.azure_utils import check_azure_container, get_azure_blob_client, get_decrypt_key
+from mfdatafeed.mongo_utils import get_mongo_client
+from mfdatafeed.zoho_auth import get_zoho_auth
+from mfdatafeed.zoho_utils import get_zoho_service
 
 # Main function
 def process_mails_core(run_start_time):

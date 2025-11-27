@@ -1,6 +1,6 @@
 
-from process_file.config import get_vault_name
-from process_file.zoho_utils import get_zoho_credentials, refresh_zoho_access_token
+from mfdatafeed.config import get_vault_name
+from mfdatafeed.zoho_utils import get_zoho_credentials, refresh_zoho_access_token
 
 
 def get_zoho_auth():

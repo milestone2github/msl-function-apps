@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 
-from process_file.azure_utils import get_secret
-from process_file.config import get_vault_name
-from process_file.logger_utils import log_custom
+from mfdatafeed.azure_utils import get_secret
+from mfdatafeed.config import get_vault_name
+from mfdatafeed.logger_utils import log_custom
 
 
 def get_mongo_client():

@@ -8,8 +8,8 @@
 - Start the project: `func start`
 
 ##### Entry Point:
-- app_file -> process_file
 
+- app_file -> process_file → removed all sub-directories, everything in core directory now
 ##### File Structure:
 - azure_utils.py : Azure clients, fetch functions for Vault data, Blob, Decryption Keys (Passwords), Storage
 - config.py : Fetch vault_name from ENVIRONMENT FILE (in Azure)/local.settings.json (on local machine)

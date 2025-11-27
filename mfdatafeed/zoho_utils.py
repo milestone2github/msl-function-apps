@@ -3,8 +3,8 @@ import time
 
 import requests
 
-from process_file.azure_utils import get_secret
-from process_file.logger_utils import log_custom
+from mfdatafeed.azure_utils import get_secret
+from mfdatafeed.logger_utils import log_custom
 
 # Fetch Zoho Credentials from Azure Vault
 def get_zoho_credentials(vault_name):
