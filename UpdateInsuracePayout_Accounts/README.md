@@ -14,6 +14,16 @@ Behavior:
   - { Accounts_Release: true, Accounts_Release_Date: YYYY-MM-DD, id: <record_id> }
 - Aggregates and returns Zoho API responses.
 
+What is actually does:
+- Receives an HTTP request with a list of record IDs
+  - For each ID:
+  - Calls Zoho CRM’s API
+  - Sets two fields:
+    - Accounts_Release = True
+    - Accounts_Release_Date = current date
+  - Sends updates to module: Insurance_Leads
+- Returns all Zoho responses back to the caller as JSON.
+
 Inputs (JSON body):
 - record_ids  (array of strings; required)
 
