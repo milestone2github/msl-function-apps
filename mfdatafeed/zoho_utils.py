@@ -31,7 +31,7 @@ def refresh_zoho_access_token(creds):
     raise Exception(f"Failed to refresh Zoho token: {response.text}")
 
   token_data = response.json()
-  log_custom("info", f"Access Token fetched : {token_data["access_token"]}")
+  log_custom("info", f"Access Token fetched : {token_data['access_token']}")
   return token_data["access_token"]
 
 # Zoho Headers for API calls
