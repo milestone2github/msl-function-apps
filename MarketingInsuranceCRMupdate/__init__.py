@@ -277,7 +277,7 @@ def main(mytimer: func.TimerRequest) -> None:
             created_at = ins.get("createdAt")
             if isinstance(created_at, dict) and "$date" in created_at:
                 created_at = datetime.fromisoformat(created_at["$date"].replace("Z", ""))
-            if not created_at or (now - created_at) < timedelta(hours=24):
+            if not created_at or (now - created_at) < timedelta(hours=16):
                 continue
 
             # Check if lead already exists
@@ -332,7 +332,8 @@ def main(mytimer: func.TimerRequest) -> None:
                 processed_insurance += 1
 
         # ========== FLOW 2: WhatsApp Leads ==========
-        whatsapp_docs = list(whatsapp_col.find({"lastSend": {"$exists": True}}))
+        whatsapp_docs = list(whatsapp_col.find({"createdAt": {"$exists": True}}))
+
         for whats in whatsapp_docs:
             contact = str(whats.get("MOBILE", "")).lstrip("+")
             if contact.startswith("91") and len(contact) > 10:
@@ -340,13 +341,18 @@ def main(mytimer: func.TimerRequest) -> None:
             if not contact or len(contact) < 8:
                 continue
 
-            last_send = whats.get("lastSend")
-            if isinstance(last_send, dict) and "$date" in last_send:
-                last_send = datetime.fromisoformat(last_send["$date"].replace("Z", ""))
-            if not last_send or (now - last_send) < timedelta(hours=24):
+            created_at = whats.get("createdAt")
+            if isinstance(created_at, dict) and "$date" in created_at:
+                created_at = datetime.fromisoformat(created_at["$date"].replace("Z", ""))
+            # Safety: if stored as string ISO
+            elif isinstance(created_at, str):
+                created_at = datetime.fromisoformat(created_at.replace("Z", ""))
+
+            # Only process leads that are at least 16 hours old
+            if not created_at or (now - created_at) < timedelta(hours=16):
                 continue
 
-            # Check if lead exists
+            # Check if lead exists in Zoho
             criteria = f"(Phone:equals:{contact})and(Product:equals:{product})"
             search_url = f"{ZOHO_API_BASE}/Insurance_Leads/search?criteria={criteria}"
             search_resp = requests.get(search_url, headers=HEADERS, timeout=10)
@@ -359,10 +365,9 @@ def main(mytimer: func.TimerRequest) -> None:
                         logging.error(f"⚠️ Missing lead ID in Zoho search response for {contact}: {data}")
                         continue
 
-                    assigned_rm_id = data["data"][0].get("Owner", {}).get("id", random.choice(HEALTH_RM_ID_LIST))
-                    logging.info(f"✅ Lead already exists in Zoho for {contact} — ID: {lead_id}")
+                    logging.info(f"✅ WhatsApp lead already exists in Zoho for {contact} — ID: {lead_id}")
 
-                    # ✅ Still update Mongo even if exists
+                    # Still update Mongo mapping
                     leads_col.update_one(
                         {"phone": contact},
                         {"$set": {
@@ -374,8 +379,20 @@ def main(mytimer: func.TimerRequest) -> None:
 
             assigned_rm_id = random.choice(HEALTH_RM_ID_LIST)
             lead_name = whats.get("NAME") or f"Lead {contact}"
-            new_lead = {"data": [{"Name": lead_name, "Phone": contact, "Product": product, "Owner": {"id": assigned_rm_id}}]}
-            create_resp = requests.post(f"{ZOHO_API_BASE}/Insurance_Leads", headers=HEADERS, json=new_lead)
+            new_lead = {
+                "data": [{
+                    "Name": lead_name,
+                    "Phone": contact,
+                    "Product": product,
+                    "Owner": {"id": assigned_rm_id}
+                }]
+            }
+            create_resp = requests.post(
+                f"{ZOHO_API_BASE}/Insurance_Leads",
+                headers=HEADERS,
+                json=new_lead,
+                timeout=10
+            )
 
             if 200 <= create_resp.status_code < 300:
                 lead_id = extract_lead_id(create_resp.json())
