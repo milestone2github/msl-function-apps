@@ -54,6 +54,12 @@ def update_zoho_crm_record(record_id, access_token):
             headers=HEADERS,
         )
 
+        # Trigger exception if response status isn't success
+        response.raise_for_status()
+
+        # Check if response JSON is valid
+        if "application/json" not in response.headers.get("Content-Type", ""):
+            raise ValueError("Non-JSON response")
         return response.json()
     except Exception as e:
         logging.error(f"Failed to update Zoho CRM record: {str(e)}")
@@ -92,11 +98,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         responses = []
         for record_id in record_ids:
-            logging.info(record_id)
-            response = update_zoho_crm_record(record_id, access_token)
-            # dataResponse = response.json()
-            logging.info(response)
-            responses.append(response)
+            try:
+                logging.info(record_id)
+                responses.append(update_zoho_crm_record(record_id, access_token))
+                # dataResponse = response.json()
+                # logging.info(response)
+                # responses.append(response)
+            except Exception as e:
+                logging.error(f"Error in {record_id}")
+                responses.append({
+                    "id": record_id,
+                    "error": str(e)
+                })
 
         return func.HttpResponse(
             json.dumps(responses),
